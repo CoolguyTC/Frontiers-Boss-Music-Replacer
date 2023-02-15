@@ -216,6 +216,7 @@ class MusicReplacer:
 def main(file_path):
     current_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+    # testing
     music_replacer = MusicReplacer(os.path.splitext(file_path)[0], current_dir)
     music_replacer.changes()
     music_replacer.write_ACB_file()
