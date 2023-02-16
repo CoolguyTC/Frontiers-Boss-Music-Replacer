@@ -16,4 +16,5 @@ def main():
 
 
 if __name__ == '__main__':
+    #mr.main("F:\Modding\Sonic Frontiers Modding\My Mods\Its Art over Im with you\\bgm_lastboss.awb")
     main()

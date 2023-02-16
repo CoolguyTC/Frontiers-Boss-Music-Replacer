@@ -26,7 +26,13 @@ class MusicReplacer:
         self.original_times = []
         self.new_times = []
         self.original_time_offsets = []
-        self.get_time_data()
+        self.isLastBoss = False
+        if os.path.basename(self.AWB_file_path) == "bgm_lastboss.awb": # final boss includes a track with two entries
+            self.isLastBoss = True
+            self.get_time_data()
+        else:
+            self.isLastBoss = False
+            self.get_time_data()
 
         print("Successfully read time data from .acb and .wav files")
 
@@ -49,7 +55,7 @@ class MusicReplacer:
             temp_setting = setting.split("=")
             match temp_setting[0]:
                 case "GameDir":
-                    self.frontiersDir = temp_setting[1]
+                    self.frontiers_dir = temp_setting[1]
 
         print("Read config from " + os.path.join(self.current_dir, "config.ini") + "\n")
 
@@ -70,6 +76,22 @@ class MusicReplacer:
         self.original_ACB_file = self.replace_timestamps()
         self.original_ACB_file = self.replace_AFS2_segment()
 
+    def replace_HCA_segments(self): # copies each corresponding 48 43 41 00 of length 0x1460 from .awb to .acb
+        ACB_HCA_offsets = self.find_HCA_offsets(self.original_ACB_file)
+        AWB_HCA_offsets = self.find_HCA_offsets(self.AWB_file)
+
+        ACB_file = ba.unhexlify(self.original_ACB_file)
+        AWB_file = ba.unhexlify(self.AWB_file)
+        
+        segment_size = 5216
+        index = 0
+        while index < len(ACB_HCA_offsets): # iterates through each HCA offset
+            ACB_file = ACB_file[:ACB_HCA_offsets[index]] + AWB_file[AWB_HCA_offsets[index]:AWB_HCA_offsets[index] + segment_size] + ACB_file[ACB_HCA_offsets[index] + segment_size:]
+            print("Replaced .acb HCA segment (" + hex(ACB_HCA_offsets[index]) + ") with .awb HCA segment (" + hex(AWB_HCA_offsets[index]) + ")")
+            index += 1
+        
+        return ba.hexlify(ACB_file)
+
     def find_HCA_offsets(self, hex_list): # locates each offset containing 48 43 41 00 followed shortly by 66 6D 74
         hex_offsets = []
         header = b'48434100'
@@ -87,26 +109,17 @@ class MusicReplacer:
             
         return hex_offsets
 
-    def replace_HCA_segments(self): # copies each corresponding 48 43 41 00 of length 0x1460 from .awb to .acb
-        ACB_HCA_offsets = self.find_HCA_offsets(self.original_ACB_file)
-        AWB_HCA_offsets = self.find_HCA_offsets(self.AWB_file)
-
-        ACB_file = ba.unhexlify(self.original_ACB_file)
-        AWB_file = ba.unhexlify(self.AWB_file)
-        
-        segment_size = 5216
-        index = 0
-        while index < len(ACB_HCA_offsets) - 1: # iterates through each HCA offset
-            ACB_file = ACB_file[:ACB_HCA_offsets[index]] + AWB_file[ACB_HCA_offsets[index]:ACB_HCA_offsets[index] + segment_size] + ACB_file[ACB_HCA_offsets[index] + segment_size:]
-            print("Replaced .acb HCA segment (" + hex(ACB_HCA_offsets[index]) + ") with .awb HCA segment (" + hex(AWB_HCA_offsets[index]) + ")")
-            index += 1
-        
-        return ba.hexlify(ACB_file)
-
     def replace_AFS2_segment(self): # copies the corresponding 41 46 53 32 segment of length 0x5C from .awb to .acb
-        ACB_file = ba.unhexlify(self.original_ACB_file)
+        ACB_file = self.original_ACB_file
         AWB_file = ba.unhexlify(self.AWB_file)
-        segmentSize = 92
+        
+        header = b'41465332'
+        start = 0
+
+        index = ACB_file.rfind(header, start)
+        segmentSize = (len(ACB_file) - index) // 2
+        ACB_file = ba.unhexlify(ACB_file)
+
 
         ACB_file = ACB_file[:len(ACB_file) - segmentSize] + AWB_file[:segmentSize] # predefined offset of 92 bytes
         print("Replaced .acb AFS2 Segment")
@@ -135,6 +148,9 @@ class MusicReplacer:
         track_lengths = []
         header = b'547261636b4576656e7400436f6d6d616e64' # TrackEvent.Command
         hex_subseq = b'07d104' # before each time prepended by track number
+        hex_subseq2 = b'07d5'
+        hex_subseq3 = b'0fd2'
+
 
         start = 0
         start = file.find(header, start)
@@ -144,8 +160,11 @@ class MusicReplacer:
             if index == -1:
                 break
             index += 6
+            print(file.find(hex_subseq2, index))
+            print(file.find(hex_subseq3, index))
+            if file.find(hex_subseq2, index) == index + 8 and file.find(hex_subseq3, index) == index + 18:
+                track_lengths.append(int.from_bytes(ba.unhexlify(file[index:(index) + 8]), byteorder='big'))
             start = index + 1
-            track_lengths.append(int.from_bytes(ba.unhexlify(file[index:(index) + 8]), byteorder='big'))
         
         return track_lengths
 
@@ -161,13 +180,17 @@ class MusicReplacer:
         index += 8
         time_offsets.append(index // 2)
 
+        if self.isLastBoss and id == 3:
+            time_bytes = ba.hexlify((time + 2).to_bytes(4, byteorder='big', signed=False))
+
         start = 0
         header = b'010b300000012100' # ControlWorkArea2 approx header
         hex_subseq = ba.hexlify((id + 4).to_bytes(2, byteorder='big', signed=False)) + time_bytes + b'00' # ControlWorkArea2 formatting
         start = self.original_ACB_file.find(header, start)
         index = self.original_ACB_file.find(hex_subseq, start)
-        index += 4
-        time_offsets.append(index // 2)
+        if index != -1:
+            index += 4
+            time_offsets.append(index // 2)
 
         return time_offsets
 
@@ -197,7 +220,13 @@ class MusicReplacer:
                 if file.endswith(extention):
                     print(os.path.join(search_folder, file))
                     try:
-                        new_times[int(file[:5])] = self.get_WAV_ms(os.path.join(search_folder, file))
+                        id = int(file[:5])
+                        new_time = self.get_WAV_ms(os.path.join(search_folder, file))
+                        if self.isLastBoss and id == 3:
+                            new_times[id] = new_time
+                            new_times[6] = new_time
+                        else:
+                            new_times[id] = new_time
                     except:
                         print("Invalid filename '" + file + "'")
 

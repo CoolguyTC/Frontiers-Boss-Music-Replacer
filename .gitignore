@@ -1,4 +1,6 @@
 .exe
+.ini
 /__pycache__
 /build
 /dist
+/boss
