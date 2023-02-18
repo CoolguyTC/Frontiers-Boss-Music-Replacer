@@ -1,7 +1,7 @@
-.exe
-.ini
-.png
-.spec
+*.exe
+*.ini
+*.png
+*.spec
 /__pycache__
 /build
 /dist
