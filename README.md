@@ -51,7 +51,11 @@ Copy the applicable .ACB and .AWB files to a new folder somewhere on your PC.
 
 **3.** You can create your own audio tracks using any audio editing program but for the sake of this tutorial I will be using Audacity.
 
-Make sure any tracks that loop in-game will loop cleanly. Also if you edit a major bosses' ending track ensure that the music climaxes/ends at around the same time that the base track finishes (failing to do so won't cause any errors but it will most likely not line up with the boss' death cutscene).
+Make sure any tracks that loop in-game will loop cleanly. Also if you edit a major bosses' ending track ensure that the music climaxes/ends at around the same time that the base track finishes (failing to do so won't cause any errors but it will most likely not line up with the boss' death cutscene). Below is the time in seconds from the start of the ending track to the explosion/end:<br/>
+GIGANTO - 19.18<br/>
+WYVERN - 9.75<br/>
+KNIGHT - 46.12<br/>
+SUPREME - 23.83<br/>
 
 Once you're happy with your tracks export your audio as a .WAV at 48000HZ.  
 ![](https://i.imgur.com/Ilf0UkD.png)  
