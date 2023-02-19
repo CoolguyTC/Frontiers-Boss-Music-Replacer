@@ -33,8 +33,12 @@ Frontiers Boss Music Replacer
 
 **Steps:**
 
-**1.** Locate the music that you want to replace. It will be located within a subfolder in your game's directory "SonicFrontiers\image\x64\raw\sound". Copy the applicable .ACB and .AWB files to a new folder somewhere on your PC.  
+**1.** Locate the music that you want to replace. It will be located within a subfolder in your game's directory "SonicFrontiers\image\x64\raw\sound".
+
 ![](https://i.imgur.com/fKXbBW1.png)  
+Copy the applicable .ACB and .AWB files to a new folder somewhere on your PC.  
+
+![](https://i.imgur.com/tXZkqiY.png)  
 **[Already made your audio files? Skip to step 4]**
 
 <br/>
@@ -54,7 +58,7 @@ Once you're happy with your tracks export your audio as a .WAV at 48000HZ.
 <br/>
 
 **4.** First make sure your .WAV files are in the same folder as your .ACB and .AWB files.  
-Then open up Eternity and go to File > Open > choose the .ACB file. Then name each of your .WAV files to the ID number they are given in Eternity (The order will sometimes be different than displayed in Foobar so watch out).  
+Then open up Eternity and go to File > Open > and choose the .ACB file. Then name each of your .WAV files to the ID number they are given in Eternity (The order will sometimes be different than displayed in Foobar so only use Eternity for this).  
 ![](https://i.imgur.com/ccDVKMv.png)
 
 Your folder should now be similar to this:  
@@ -66,7 +70,7 @@ Your folder should now be similar to this:
 
 <br/>
 
-**6.** Now the easy part, close Eternity and drag your newly generated .AWB file onto the Frontiers Boss Music Replacer.
+**6.** Now the easy part, close Eternity and drag your newly generated .AWB file onto the Frontiers Boss Music Replacer .EXE.
 
 ![](https://i.imgur.com/ki5hdmq.png)
 
