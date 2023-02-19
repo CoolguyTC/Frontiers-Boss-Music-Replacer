@@ -1,31 +1,84 @@
 # Frontiers-Boss-Music-Replacer
 
-
-Allows easy modification of boss music in Sonic Frontiers
 -By CoolguyTC
 
-Github page: https://github.com/CoolguyTC/Frontiers-Boss-Music-Replacer
+Allows easy modification of boss music in Sonic Frontiers
+For any other sound/music check out Acrolo's guide
+Applicable tracks will start with **"bgm_boss"** or **"bgm_miniboss"**.
 
-Prerequisites:
+<br/>
 
-Any audio editing tool e.g. Audacity
-Foobar2000 with the VGMstream plugin
-Eternity Audio Tool
+**Build Instructions:**
+Clone the repository and open CMD in its location
+Make sure you have Pyinstaller and run the command **"pyinstaller --onefile --icon=BossMusicReplacer.ico frontiers_boss_music_replacer.py"**
+Once done move the .exe from /dist to the base folder and you can delete the generated /build, /dist and .spec
 
-Tutorial:
+<br/>
 
-1. Locate the music that you want to replace. It will be located within the directory "SonicFrontiers\image\x64\raw\sound", will start with "bgm_", will include boss/miniboss in the title and will have one .ACB and one .AWB file. Open up Foobar2000 and drag the .AWB file onto the window. From here you can preview the individual tracks within the file as well as view their lengths and other info. Once your certain this is the file you want to mod, copy and paste the .ACB and .AWB file into a folder outside of the game's directory.
+<br/>
 
-2. Create the audio
-You can create your own audio tracks using any audio editing program e.g. Audacity. Audio needs to be exported as a .WAV at 48000HZ. Before naming your exported audio files it is important that you open up Eternity Audio Tool use it to open your copied .ACB file. Doing this you can see the correct order of the tracks as they are stored in the game files. Make sure to name each track the track ID that is displayed. (You can use Foobar2000 to help figure out which tracks are which but remember Foosbar2000 will occasionally show tracks in the wrong order)
+## <u>**Tutorial:** </u>
 
-3. Using Eternity Audio Tool to replace tracks
-In Eternity Audio Tool, with your copied .acb file open, select a track that you want to replace and choose the .WAV file with the same ID. Just to be safe hit "Don't loop" when given the option (Don't worry your track will still loop if it needs to). Once each track you want modded has been replaced make sure to save and you can now close Eternity Audio Tracker and Foobar2000 if you still have them open.
+<br/>
 
-4. The final step!
-You should now have a folder containing a .ACB file, .AWB file and each of your named .WAV files. Just double check that everything is set and there is nothing else in that folder before continuing. (This step will require the original .ACB file to be intact withing it's original directory. Basically as long as you haven't overwritten or deleted it your good). Now the easy part, simply drag and drop the coppied .AWB file onto "frontiers_boss_music_replacer.exe" and wait for it to finish. Assuming you didn't get any errors (Check "I got an error!" section below) your .ACB and .AWB files are complete! Drag and drop them into the same location you got them from (Making sure to make a backup of the originals of course) or more preferably make your own HedgeMod mod.
+**You Need:**
 
+Any audio editing tool e.g. [Audacity](https://www.audacityteam.org/download/)  
+[Foobar2000](https://www.foobar2000.org/download) with the [VGMstream plugin](https://github.com/vgmstream/vgmstream/releases/)  
+[Eternity Audio Tool](https://mega.nz/file/W5NHxDYD#IM7xirUu1-K8e34lINmgC3MFqG1OWFTuscbSptK5fRw)  
+Frontiers Boss Music Replacer
 
-I got an error!
+<br/>
 
-This program is has not been tested on every file so bugs may exist. If you encounter any bugs first ensure you followed the steps in the tutorial correctly, then contact me by leaving a comment on the tool's Gamebanana page: LINK
+**Steps:**
+
+**1.** Locate the music that you want to replace. It will be located within a subfolder in your game's directory "SonicFrontiers\image\x64\raw\sound". Copy the applicable .ACB and .AWB files to a new folder somewhere on your PC.  
+![](https://i.imgur.com/fKXbBW1.png)  
+**[Already made your audio files? Skip to step 4]**
+
+<br/>
+
+**2.** Open up Foobar and drag the .AWB file onto the window. From here you can preview the individual tracks within the file as well as view their lengths and other info. This will be useful when creating your own tracks.
+
+<br/>
+
+**3.** You can create your own audio tracks using any audio editing program but for the sake of this tutorial I will be using Audacity.
+
+Make sure any tracks that loop in-game will loop cleanly. Also if you edit a major bosses' ending track ensure that the music climaxes/ends at around the same time that the base track finishes (failing to do so won't cause any errors but it will most likely not line up with the boss' death cutscene).
+
+Once your happy with your tracks export your audio as a .WAV at 48000HZ.  
+![](https://i.imgur.com/Ilf0UkD.png)  
+**[Note: I recommend saving your Audacity project just in case you are not happy with the timings during testing. This makes it much easier to tweak them later.]**
+
+<br/>
+
+**4.** First make sure your .WAV files are in the same folder as your .ACB and .AWB files.  
+Then open up Eternity and go to File > Open > choose the .ACB file. Then name each of your .WAV files to the ID number they are given in Eternity (The order will sometimes be different than displayed in Foobar so watch out).  
+![](https://i.imgur.com/ccDVKMv.png)
+
+Your folder should now be similar to this:  
+![](https://i.imgur.com/mWE7Kkl.png)
+
+<br/>
+
+**5.** In Eternity, select a track you want to replace and hit the replace button. Then find the correct .WAV file and when given the option pick **"Do not loop"**. Do this for every file you wish to replace and then hit save.
+
+<br/>
+
+**6.** Now the easy part, close Eternity and drag your newly generated .AWB file onto the Frontiers Boss Music Replacer.
+
+![](https://i.imgur.com/ki5hdmq.png)
+
+**[On first run it will ask you to paste in your Sonic Frontiers directory]**
+
+<br/>
+
+**7.** Once the program has ran you can now use these .ACB and .AWB files to listen to your music in-game. Congrats on the mod!
+
+<br/><br/>
+
+## **<u>I got an error!</u>**
+
+This program is has not been tested on every boss and miniboss so bugs may exist. If you encounter any bugs first ensure you followed the steps in the tutorial correctly and that your game's sound files are not modified, then contact me by leaving a comment on [Gamebanana](https://gamebanana.com/tuts/15758) or leaving a bug report on the [Github](https://github.com/CoolguyTC/Frontiers-Boss-Music-Replacer) repo.
+
+**[Specific error is appreciated if you have one]**
