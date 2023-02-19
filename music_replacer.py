@@ -45,7 +45,9 @@ class MusicReplacer:
                 print('Found original .acb at:', file_path)
                 break
         if (file_path == ""):
-            raise FileNotFoundError('Original .acb file could not be located')
+            print("\nERROR - Original .acb file could not be located")
+            input()
+            sys.exit()
         
 
         return file_path
@@ -89,7 +91,9 @@ class MusicReplacer:
         AWB_HCA_offsets = self.find_HCA_offsets(self.AWB_file)
 
         if len(ACB_HCA_offsets) > len(AWB_HCA_offsets):
-            raise Exception(".awb contains less HCA segments that expected. Your .awb file may be corrupted.")
+            print("\nERROR - .awb contains less HCA segments that expected. Your .awb file may be corrupted.")
+            input()
+            sys.exit()
 
         ACB_file = ba.unhexlify(self.original_ACB_file)
         AWB_file = ba.unhexlify(self.AWB_file)
@@ -214,13 +218,13 @@ class MusicReplacer:
                     try:
                         id = self.strip_ID(file)
                         if id >= len(original_times) or id < 0:
-                            print("Invalid file id (" + id + ") in file '" + file + "'")
+                            print("Warning - Invalid file id (" + id + ") in file '" + file + "'")
                             break
 
                         new_time = self.get_WAV_ms(os.path.join(search_folder, file))
 
                         if new_time == -1:
-                            print("In correct formating in file '" + file + "'")
+                            print("Warning - Incorrect formatting in file '" + file + "'")
                             break
                         
                         if self.isLastBoss and id == 3:
@@ -232,7 +236,7 @@ class MusicReplacer:
                             new_times[id] = new_time
                             print("[" + str(id) + "] Successfully loaded " + file)
                     except:
-                        print("Invalid filename '" + file + "'")
+                        print("Warning - Invalid filename '" + file + "'")
 
         return new_times
     
@@ -263,7 +267,9 @@ class MusicReplacer:
 
         index = ACB_file.rfind(header, start)
         if index == -1:
-            raise Exception("Unable to locate AFS2 segment in original .acb file. This file may have been corrupted.")
+            print("\nERROR - Unable to locate AFS2 segment in original .acb file. This file may have been corrupted.")
+            input()
+            sys.exit()
 
         segmentSize = (len(ACB_file) - index) // 2
         ACB_file = ba.unhexlify(ACB_file)
@@ -276,7 +282,10 @@ class MusicReplacer:
 
     def write_ACB_file(self): # writes changes to the .acb file 
         if len(self.original_ACB_file) != self.original_ACB_length:
-            raise Exception("Size of .acb file was altered. Changes have not been applied.")
+            print("\nERROR - Size of .acb file was altered. Changes have not been applied.")
+            input()
+            sys.exit()
+
         file = open(self.ACB_file_path, "wb")
         file.write(ba.unhexlify(self.original_ACB_file))
         print("Successfully wrote changes to " + self.ACB_file_path)
