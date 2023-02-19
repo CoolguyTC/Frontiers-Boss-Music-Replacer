@@ -2,16 +2,17 @@
 
 -By CoolguyTC
 
-Allows easy modification of boss music in Sonic Frontiers
-For any other sound/music check out Acrolo's guide
+Allows easy modification of boss music in Sonic Frontiers.
 Applicable tracks will start with **"bgm_boss"** or **"bgm_miniboss"**.
+For any other sound/music check out [Acrolo's guide](https://gamebanana.com/tuts/15462).
 
 <br/>
 
 **Build Instructions:**
-Clone the repository and open CMD in its location
-Make sure you have Pyinstaller and run the command **"pyinstaller --onefile --icon=BossMusicReplacer.ico frontiers_boss_music_replacer.py"**
-Once done move the .exe from /dist to the base folder and you can delete the generated /build, /dist and .spec
+
+Clone the repository and open CMD in its location.<br/>
+Make sure you have Pyinstaller and run the command **"pyinstaller --onefile --icon=BossMusicReplacer.ico frontiers_boss_music_replacer.py"**<br/>
+Once done move the .exe from /dist to the base folder and you can delete the generated /build, /dist and .spec<br/>
 
 <br/>
 
@@ -46,7 +47,7 @@ Frontiers Boss Music Replacer
 
 Make sure any tracks that loop in-game will loop cleanly. Also if you edit a major bosses' ending track ensure that the music climaxes/ends at around the same time that the base track finishes (failing to do so won't cause any errors but it will most likely not line up with the boss' death cutscene).
 
-Once your happy with your tracks export your audio as a .WAV at 48000HZ.  
+Once you're happy with your tracks export your audio as a .WAV at 48000HZ.  
 ![](https://i.imgur.com/Ilf0UkD.png)  
 **[Note: I recommend saving your Audacity project just in case you are not happy with the timings during testing. This makes it much easier to tweak them later.]**
 
