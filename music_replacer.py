@@ -254,7 +254,7 @@ class MusicReplacer:
             index += 1
         return int(filename[:index]) if index >= 0 else -1
 
-    def replace_AFS2_segment(self): # copies the corresponding 41 46 53 32 segment of length 0x5C from .awb to .acb
+    def replace_AFS2_segment(self): # determines the length and copies the corresponding 41 46 53 32 segment from .awb to .acb
         ACB_file = self.original_ACB_file
         AWB_file = ba.unhexlify(self.AWB_file)
         
