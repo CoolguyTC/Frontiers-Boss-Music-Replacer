@@ -27,7 +27,7 @@ Once done move the .exe from /dist to the base folder and you can delete the gen
 Any audio editing tool e.g. [Audacity](https://www.audacityteam.org/download/)  
 [Foobar2000](https://www.foobar2000.org/download) with the [VGMstream plugin](https://github.com/vgmstream/vgmstream/releases/)  
 [Eternity Audio Tool](https://mega.nz/file/W5NHxDYD#IM7xirUu1-K8e34lINmgC3MFqG1OWFTuscbSptK5fRw)  
-Frontiers Boss Music Replacer
+This tool
 
 <br/>
 
