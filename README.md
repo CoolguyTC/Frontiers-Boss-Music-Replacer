@@ -2,9 +2,9 @@
 
 -By CoolguyTC
 
-Allows easy modification of boss music in Sonic Frontiers.
-Applicable tracks will start with **"bgm_boss"** or **"bgm_miniboss"**.
-For any other sound/music check out [Acrolo's guide](https://gamebanana.com/tuts/15462).
+Allows easy modification of boss music in Sonic Frontiers.<br/>
+Applicable tracks will start with **"bgm_boss"** or **"bgm_miniboss"**.<br/>
+For any other sound/music check out [Acrolo's guide](https://gamebanana.com/tuts/15462).<br/>
 
 <br/>
 
