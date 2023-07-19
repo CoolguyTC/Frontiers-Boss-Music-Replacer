@@ -2,6 +2,7 @@ import sys
 import os
 import binascii as ba
 import wave
+import numpy
 
 class MusicReplacer:
     def __init__(self, mod_dir, current_dir):
@@ -127,16 +128,20 @@ class MusicReplacer:
 
     def get_time_data(self): # saves timing and offset data from .awb and .acb files
         original_times = self.get_track_lengths(self.original_ACB_file)
-        #newTimes = self.getTrackLengths(self.ACBFile)
         new_times = self.get_WAV_durations(original_times)
         # gets duration in milliseconds of default and modified tracks
+
+        if numpy.array_equal(original_times, new_times):
+            print("\nERROR - No track lengths to change! Ensure your .wav files are located in the same directory as your .acb and .awb files.")
+            input()
+            sys.exit()
         
         original_offsets = []
         index = 0
         while index < len(original_times):
             original_offsets.append(self.get_time_offsets(index, original_times[index]))
             if len(original_offsets[index]) != 2:
-                print("Warning - " + original_times[index] + " had appeared " + len(original_offsets[index]) + " time(s) [Expected 2]")
+                print("Warning - " + str(original_times[index]) + " has appeared " + str(len(original_offsets[index])) + " time(s) [Expected 2]")
             index += 1
         # retrieves multiple offsets for each track
 
@@ -199,9 +204,15 @@ class MusicReplacer:
         ACB_file = ba.unhexlify(self.original_ACB_file)
         while index < len(self.original_times): # iterates through each individual replacement
             for offset in self.original_time_offsets[index]:
-                ACB_file = ACB_file[:offset] + self.new_times[index].to_bytes(4, byteorder='big', signed=False) + ACB_file[offset + 4:]
-                if (self.original_times[index] != self.new_times[index]):
-                    print("[" + str(index) + "] Replaced track length " + str(self.original_times[index]) + "ms with " + str(self.new_times[index]) + "ms (" + hex(offset) + ")")
+                
+                new_time = self.new_times[index]
+
+                if (os.path.basename(self.AWB_file_path) == "bgm_miniboss_tutorial.awb" and index >= 3): # corrects odd formating in tutorial file
+                    new_time = self.new_times[index - 3]
+
+                ACB_file = ACB_file[:offset] + new_time.to_bytes(4, byteorder='big', signed=False) + ACB_file[offset + 4:]
+                if (self.original_times[index] != new_time):
+                    print("[" + str(index) + "] Replaced track length " + str(self.original_times[index]) + "ms with " + str(new_time) + "ms (" + hex(offset) + ")")
             index += 1
         
         print("")
@@ -218,7 +229,7 @@ class MusicReplacer:
                     try:
                         id = self.strip_ID(file)
                         if id >= len(original_times) or id < 0:
-                            print("Warning - Invalid file id (" + id + ") in file '" + file + "'")
+                            print("Warning - Invalid file id (" + str(id) + ") in file '" + file + "'")
                             break
 
                         new_time = self.get_WAV_ms(os.path.join(search_folder, file))
