@@ -141,7 +141,7 @@ class MusicReplacer:
         while index < len(original_times):
             original_offsets.append(self.get_time_offsets(index, original_times[index]))
             if len(original_offsets[index]) != 2:
-                print("Warning - " + str(original_times[index]) + " has appeared " + str(len(original_offsets[index])) + " time(s) [Expected 2]")
+                print("Warning - [" + str(index) + "] " + str(original_times[index]) + " has appeared " + str(len(original_offsets[index])) + " time(s) [Expected 2]")
             index += 1
         # retrieves multiple offsets for each track
 
@@ -155,7 +155,7 @@ class MusicReplacer:
         header = b'547261636b4576656e7400436f6d6d616e64' # TrackEvent.Command
         hex_subseq = b'07d104' # before each time prepended by track number
         hex_subseq2 = b'07d5'
-        hex_subseq3 = b'0fd2'
+        #hex_subseq3 = b'0fd2'
 
 
         start = 0
@@ -166,7 +166,7 @@ class MusicReplacer:
             if index == -1:
                 break
             index += 6
-            if file.find(hex_subseq2, index) == index + 8 and file.find(hex_subseq3, index) == index + 18:
+            if file.find(hex_subseq2, index) == index + 8: #and file.find(hex_subseq3, index) == index + 18
                 track_lengths.append(int.from_bytes(ba.unhexlify(file[index:(index) + 8]), byteorder='big'))
             start = index + 1
         
@@ -175,6 +175,9 @@ class MusicReplacer:
     def get_time_offsets(self, id, time): # returns a list of default offsets for a given track
         time_offsets = []
         time_bytes = ba.hexlify(time.to_bytes(4, byteorder='big', signed=False))
+
+        if os.path.basename(self.AWB_file_path) == "bgm_miniboss_skier.awb" and id == 2:
+            return time_offsets
 
         start = 0
         header = b'547261636b4576656e7400436f6d6d616e64' # TrackEvent.Command
@@ -185,8 +188,13 @@ class MusicReplacer:
             index += 8
             time_offsets.append(index // 2)
 
-        if self.isLastBoss and id == 3:
+        if self.isLastBoss and id == 3: # protects against timestamps with slightly different values
             time_bytes = ba.hexlify((time + 2).to_bytes(4, byteorder='big', signed=False))
+        elif os.path.basename(self.AWB_file_path) == "bgm_miniboss_skier.awb":
+            if (id == 1):
+                time_bytes = ba.hexlify((time + 1).to_bytes(4, byteorder='big', signed=False))
+            elif (id >= 3):
+                id = id - 1
 
         start = 0
         header = b'010b300000012100' # ControlWorkArea2 approx header
@@ -204,15 +212,20 @@ class MusicReplacer:
         ACB_file = ba.unhexlify(self.original_ACB_file)
         while index < len(self.original_times): # iterates through each individual replacement
             for offset in self.original_time_offsets[index]:
-                
-                new_time = self.new_times[index]
+                adjusted_index = index
 
-                if (os.path.basename(self.AWB_file_path) == "bgm_miniboss_tutorial.awb" and index >= 3): # corrects odd formating in tutorial file
-                    new_time = self.new_times[index - 3]
+                if (os.path.basename(self.AWB_file_path) == "bgm_miniboss_tutorial.awb" and index >= 3): # protects against select duplicate track IDs
+                    adjusted_index = index - 3
+                elif (os.path.basename(self.AWB_file_path) == "bgm_miniboss_tracker.awb" and index >= 4):
+                    adjusted_index = index - 3
+                elif (os.path.basename(self.AWB_file_path) == "bgm_miniboss_skier.awb" and index >= 3):
+                    adjusted_index = index - 1
+
+                new_time = self.new_times[adjusted_index]
 
                 ACB_file = ACB_file[:offset] + new_time.to_bytes(4, byteorder='big', signed=False) + ACB_file[offset + 4:]
                 if (self.original_times[index] != new_time):
-                    print("[" + str(index) + "] Replaced track length " + str(self.original_times[index]) + "ms with " + str(new_time) + "ms (" + hex(offset) + ")")
+                    print("[" + str(adjusted_index) + "] Replaced track length " + str(self.original_times[index]) + "ms with " + str(new_time) + "ms (" + hex(offset) + ")")
             index += 1
         
         print("")
